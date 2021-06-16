@@ -1,0 +1,128 @@
+# Spring.
+
+JAVA의 EE의 영역을 포함하는 역할을 Spring이 하게되면서 EE를 거의 사용하지 않고, Spring을 사용하게 되었다.
+(JAVA EE는 유료가 되어서 거의 사용하지 않는다)
+
+
+# 웹 서버 프로그램이란.
+
+- 서버-클라이언트 프로그램을 웹을 활용한 웹서버 - 웹클라이언트 프로그램으로 바꾼 것이다.
+- 클라이언트 프로그램에 따로 업데이트를 할 필요가 없어졌다. (웹에 모든 것(data)이 표시됨으로)
+
+
+# WAS
+
+Web Application Server 		Server App의 data를 만들어주는 역할.
+
+
+# Sever Application의 구성.
+
+Server App + WAS 
+
+
+# Servlet
+
+Servlet : Server를 조각냈다.
+
+
+# Tomcat
+
+WAS중 하나이다. (Web Server)
+
+
+# Tomcat 실행하기.
+
+1. 환경변수 확인. JDK를 환경변수에 넣어줘야 실행가능하다.
+2. 다른 process와 충돌되는 것이 없는지 확인해줘야된다.
+
+두가지 확인 후, startup.bat를 실행하면 됨.
+
+
+# Tomcat 활용하기.
+
+1. Root폴더에 saucefile을 넣는다.
+2. localhost:8080/saucefile하면 실행된다.
+
+
+# Context 사이트 추가하기.
+
+Context			http://IP:port/Context/saucefile
+				그룹화 하여 큰 규모의 웹을 분할할때 사용한다.
+
+
+# Context활용		
+
+1. Root 폴더에 만들기.
+  
+- Root폴더에 contextName 폴더를 만들어준다.
+- 웹에서 localhost:8080/contextName/sauceFile하면 실행된다.
+  
+2. 다른 폴더에 만들기. (지양되는 방식이다 다른 방법은 나중에 배움)
+
+- conf폴더에 server.xml을 메모장으로 켠다.
+- 아래부분 <host>부분 밑에 Context를 작성해준다.
+- <Context path="contextName" docBase="path경로" privileaged="true"/>
+- Tomcat server를 껏다켠다.
+- 웹에서 localhost:8080/contextName/sauceFile하면 실행된다.
+				
+
+# Java에서 Servlet 다루기.
+
+class 		추상클래스 HttpServlet을 상속받는 클래스를 만든다.
+			className Servlet이라고 부른다.
+			ex) className extends HttpServlet
+			
+method 		service()를 사용해야된다. (기본 method인 main()이 아니다)
+			
+
+# Servlet의 classfile을 두는곳.
+
+Root폴더 -> WEB-INF 폴더 -> classes 폴더 -> class 보관.
+Server에서 data를 저장하는 공간이다.
+
+
+# 사용자가 classfile을 요청하는 법.
+
+classfile에게 web에서 사용될 새로운 servlet 이름을 Tomcat에서 부여한다.
+
+
+# WEB-INF.
+
+WEB-INF폴더 안에 있는 모든 파일은 WEB에서 직접 요청할 수 없다.
+
+
+# class에 새로운 id 부여하기.
+
+1. WEB-INF폴더 안에 classes안에 classsauce를 넣어준다.
+2. WEB-INF폴더 안에 web.xml에 <servlet>태그를 통해 입력해준다.
+3. 설정 후 다시 TOMCAT을 실행해준다.
+
+ex)
+<servlet>
+	<servlet-name>na</servlet-name>
+	<servlet-class>packageName.className</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>na</servlet-name>
+	<url-pattern>/context</url-pattern>
+</servlet-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

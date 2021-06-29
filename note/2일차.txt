@@ -1,0 +1,168 @@
+2일차
+
+ # URL context
+
+context : resource를 보관하는 directory(folder) 개념이다. ( 가상경로라고 불르기도 한다 )
+
+ex ) ip(or hostname):Port/context/resource
+
+
+ # context 만들기.
+
+1. ROOT안에 context 생성하기
+ROOT directory -> 새로운 directory 생성 -> resource 넣기.
+
+2. 아무 path에나 생성하고 설정해주기.
+ - 생성 : 아무대나 directory 생성 -> resource 넣기.
+ - 설정 : conf -> server.xml메모장으로 켜기 ( Host를 설정할 수 있다 ) -> Host name 밑에 작성하기.
+ - 작성 : <Context path ='it' docBase="C:\tomcat-9.0.48\webapps\ITWeb" privileged="true"/>
+ - 확인 : tomcat을 다시 실행 -> localhost:8080/context/resource
+
+3.유의사항
+ - 대소문자 잘 구별하기.
+ - context를 Host로 구축하고 context를 지우면 Host를 알수 없어서 tomcat server가 실행되지 않을 수 있다.
+
+
+ # Servlet 
+
+Servlet : Web Server에 필요한 Server app들을 조각내서 보관하여 필요한 것들만 꺼내 쓰는 효율적인 방식이다.
+           필요한 것들만 하나씩 만들면 된다.
+
+
+ # Servlet Code.
+
+1. 작성
+
+public class ClassName extends HttpServlet{
+
+         public void service ( HttpServletRequest request, HttpServletRespnse response ) 
+                                                                      throws IOException, ServletException {
+                   실행할 내용들. 
+        }
+}
+
+HttpServlet을 상속받아야된다.
+service method가 main method와 같은 역할을 한다.
+class명과 file명을 같은 걸로 해야된다.
+
+
+2. compile하기.
+
+cmd.
+javac source.java ( module 오류가 난다 - path를 설정해야 됨 )
+
+path설정.
+javac로 path 명령어 확인 -> tomcatdp lib에 servlet-api.jar의 path경로를 복사 
+-> javac -cp 경로\servlet-api.jar source.java.
+
+컴파일확인.
+source file이 compiler되어서 class를 만들면 성공이다.
+
+
+3. compile된 class파일 다루기.
+
+생성된 class파일을 저장하는 장소. ( 절대로 url을 통해 data를 조작할 수 없도록 해야된다 )
+tomcat -> webapps -> ROOT -> WEB-INF파일 ( 없으면 생성 ) -> classes ( 없으면 생성 ) -> package라면 packge도 생성.
+
+WEB-INF directory는 URL로 요청할 수 없는 경로이다. ( server data를 넣는다 )
+
+class파일을 사용할 수 있도록 mapping하기. 
+WEB-INF -> web.xml 메모장으로 열기 
+
+web.xal에 추가할 내용.
+<servlet>
+	<servlet-name>na</servlet-name>			
+	<servlet-class>Nana</servlet-class>			
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>na</servlet-name>		
+	<url-pattern>/hello</url-pattern>		
+</servlet-mapping>
+
+servlet-name은 servlet name을 적어준다.
+Nana.class 파일을 URL/hello url주소를 통해 실행시킨다.
+패키지명이 있다면, Pacakge.Nana로 적어야된다.
+
+실행.
+url/hello.              Nana.class가 실행된다. ( console에서 무언가 실행된다 )
+
+
+4. console이 아닌 웹에 문자열 출력하기. ( 이해하는게 굉장히 중요하다 )
+
+다시 코딩하기.
+service 메소드안에 
+OutputStream os = response.getOutputStream();
+PrintStream out = new PrintStream(os, true);
+out.println( " Hello Servlet! " );
+
+1-2-3의 순서를 다시 실행한다. ( compile -> classes에 파일 가져다놓기 -> mapping -> start.bat 다시 실행 )
+
+
+5. 팁.
+
+PrintWriter out = response.getWriter( );
+Writer( ) : 다국어를 사용할 경우 Writer( ) 를 사용한다.
+
+추가적인 I/O에 대한 공부가 필요하다.
+
+
+6. 간단정리.
+
+코드 -> 컴파일 -> 배포( WEB-INF ) -> 톰캣 서버 재시작 -> 브라우저로 요청.
+
+
+ # 이클립스 설정하기. 
+
+ctrl + f11로 앞에 배운 6가지 과정을 간단하게 처리해준다.
+Java EE버전을 설치한다.
+
+Project 만들기.
+Dynamic Web Project -> Target runtime (실행환경 설정 - Tomcat) -> Tomcat directory 설정.
+
+
+ # 이클립스로 html file 만들기.
+
+WebContent : home directory
+ctrl + f11 = home server를 하나 만드는 것이다.
+
+실행
+WebContent에 html file을 하나 만든다. -> ctrl + f11을 눌러서 완성.
+
+오류
+server error = 8080 port를 이미 다른 server가 사용하고 있으면 오류발생.
+
+확인
+windows -> Web Browser -> 원하는 인터넷 brower 설정. -> 결과 = url/projectName/fileName.
+
+Context바꾸기.
+project 마우스 오른쪽 클릭 -> Properties -> Web Project Settings -> Context 설정 -> 결과 = URL/Context/fileName
+'/'로 바꾸면 기본 server로 설정된다.
+
+Server재실행하기.
+Console창 -> stop server. 
+Server창 -> Project 제거.
+
+
+ # 이클립스로 Java파일 만들기.
+
+Java Resources -> src -> class생성 -> Package, className 설정 -> 코드 작성 
+-> WebContent -> WEB-INF -> web.xml (없으면 tomcat에서 복사하기) -> web.xml mapping 설정하기.
+
+
+ # Annotation을 이용한 URL 매핑.
+
+Annotation을 이용한 URL 매핑을 하기 위한 사전 설정.
+servlet 3.0이상에서 사용가능.
+web.xml -> < web-app ~~~~~~ metadata-complete="ture">  "true"를 "false"로 변경.
+metadata-complete="ture" : server관련된 모든 data 설정이 web.xml에 있다. ( Annotation 사용 X )
+기존에 설정했었던 web.xml에 있었던 mapping 정보를 지우거나 주석처리하기. 
+
+사용.
+@WebServlet("/context") ( class위에 작성 )
+
+추가적인 내용.
+따로 코딩하지 않아도 되는 간편함도 있지만 여러 사람과 같이 협업을 해야 될경우, 
+web.xml에 작성하고 공유하기가 쉽지 않기 때문에 Annotation을 사용.
+
+

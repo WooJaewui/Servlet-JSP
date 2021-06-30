@@ -1,0 +1,50 @@
+3일차.
+
+
+ # Servlet 출력 형식의 이해.
+
+println("Hello world")로 코드를 작성해도 WEB에서는 줄바꿈을 해주지 않는게 정상이다.
+web은 markup언어를 사용하고 "<br>"를 넣어줘야 줄바꿈이 되는게 web의 markup언어체계이다.
+Internet Exploer browser에서는 줄바꿈이 안되고, Chrome이나 Edge에서는 줄바꿈이 되서 보여준다.
+
+println("Hello world<br>")을 해주면 Chrom이나 Edge같이 자동으로 줄바꿈을 해줬던 browser에서는 
+"Hello world<br>"이 출력된다. ( 컨텐츠 형식을 알려주지 않았기 때문이다 - browser가 자의적인 해석을 한다 )
+
+줄바꿈이 안되는 browser = html로 해석한 것.
+줄바꿈이 되는 browser = text로 해석한 것.
+
+우리가 보내는 문서가 어떤 형식인지 browser에 알려줘야 이런 문제가 발생하지 않는다.
+
+
+ # 한글과 컨텐츠 형식 출력하기.
+
+println("한글")을 하면 ??로 출력된다. ( 한국어를 인식하지 못한다 - 톰캣은 ISO-8859-1로 인코딩한다 )
+ISO-8859-1은 1바이트로 글자를 보내는 형식이다. ( 한국어는 2바이트로 보내야 된다 )
+
+보내는 data의 인코딩을 바꾸고 WEB에서 읽어들이는 인코딩 방식도 바꿔야된다.
+
+res.setCharacterEncoding("UTF-8");                            보내는 data의 인코딩방식 설정.
+res.setContentType("text/html; charset=UTF-8");            WEB에서 읽어들이는 Type과 읽는방식을 설정.
+
+"text/text; charset=UTF-8"로 하면 text형태로 읽어서 browser를 사용가능.
+
+
+ # GET요청과 쿼리스트링.
+
+기본적으로 WEB에서 요청하는 것은 문서이다.   
+ex ) URL/Hello -> Hello 문서를 요청.
+
+queryString : query문자열을 통해 요청하는 것.  
+ex ) URL/Hello?cnt=3 -> Hello 문서 이외에 cnt=3이라는 추가적인 요청을 하는 것.
+
+req.getParameter("queryString");         
+URL/Hello?queryString=N을 했을때, N을 String으로 반환한다.
+
+
+
+
+
+
+
+
+

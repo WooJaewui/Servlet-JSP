@@ -1,0 +1,309 @@
+6일차 23 ~ 40강.
+
+
+ # 여러 개의 Submit 버튼 사용하기.
+
+html
+<input type="submit" name="submitName" value="submit1">
+<input type="submit" name="submitName" value="submit2">
+
+name을 같게 하고 value값을 다르게해서 구분해 주는 방식이 좋다. ( 코딩을 줄일 수 있다 )
+submit은 버튼을 눌른 것만 data가 전달되기 때문에 name을 같게해도 상관이 없다.
+
+servlet
+String sub_ = request.getParameter("submitName");
+if(sub_.equals("submit") { 연산할내용; }
+
+
+
+ # 입력 데이터 배열로 받기.
+
+배열로 받는 이유.
+여러 문자를 queryString으로 받을때 매번 다른 이름으로 받으면 받는사람의 코드가 많이 늘어난다.
+하나로 묶을만한 데이터를 같은 이름으로 받아서 배열로 정리하면 코드를 줄일 수 있다.
+
+html
+<input type="text" name="name">
+<input type="text" name="name">
+<input type="text" name="name">
+....
+<input type="text" name="name">
+
+servlet
+String[] a = request.getParameterValues("name");
+
+
+
+ # 상태 유지의 필요성.
+
+상태유지.
+web에 query를 통해 정보를 보냈을때 web 주소가 바뀌면 정보들이 사라지는데, 
+그래서 이 data들을 어딘가에 저장해야 될 필요성을 느끼게되었다.
+
+상태 유지를 위한 5가지 방법.
+ServletContext.
+session.
+cookie.
+hidden input.
+querystring.
+
+
+
+ # ServletContext 객체와 상태 값 유지.
+
+Servlet Context : servlet간에 연결될 수 있도록 상태를 저장해주는 공간.
+
+html.
+<input type="submit" name="operator" value="+">
+<input type="submit" name="operator" value="-">
+<input type="submit" name="operator" value="=">
+
+servlet.
+String op_ = request.getParameter("operator")
+ServletContext application = request.getServletContext( );
+
+저장.
+application.setAttribute( "key", value );    key와 value를 같이 저장.
+
+사용.
+application.getAttribute("key")              key에 저장된 value 반환.
+
+ServletContext는 Collection처럼 사용한다.
+
+
+
+ # Session 객체와 상태 값 유지.
+
+html.
+<input type="submit" name="operator" value="+">
+<input type="submit" name="operator" value="-">
+<input type="submit" name="operator" value="=">
+
+servlet.
+String op_ = request.getParameter("operator")
+HttpSession session = request.getSession( );
+
+저장.
+session.setAttribute( "key", value );    key와 value를 같이 저장.
+
+사용.
+session.getAttribute("key")              key에 저장된 value 반환.
+
+ServletContext과 사용방법이 똑같다. ( ServletContext에 Session을 넣으면 됨 )
+
+ServletContext과 차이점.
+1. ServletContext은 전역에 사용할 수 있다. 
+2. session은 세션 범위에서만 사용할 수 있다. ( 현재 접속자마다 달라짐 )
+
+
+
+ # 웹 서버가 Session을 구분하는 방식.
+
+1. web에 처음 요청이 들어올때는 Session ID가 없다. ( Session 사용 불가 )
+2. Application 정보만을 이용하고 Servlet이 응답할때 Session ID를 부여한다.
+3. web이 Session ID와 응답을 받고, 다른 요청을 할때 Session ID와 요청을 같이 Servlet에게 요청.
+4. Servlet의 Session Data를 사용할 수 있다.
+
+Session은 나와 관련된 기록들을 data로 남겨서 저장하고 첫번째 응답에 ID값을 받아서 2번째 요청부터 이용할 수 있다.
+
+Session data 지우기.
+void invailidate( ) { 지울 객체 }  -  session data 지우기.
+setMaxInactiveInterval(int interval )  - session 타임아웃을 정수로 설정. ( 기본 30분 - Tomcat에서 확인 가능 )
+
+주의사항.
+다른 사람의 Session ID를 알아내서 내가 Server에 접근하면 다른 사람의 Data를 사용할 수 있다. ( 관리 필요 )
+
+
+
+ # Cookie를 이용해 상태 값 유지.
+
+Cookie 설정.
+1. Header 설정.
+2. 사용자데이터. 
+3. 데이터 설정.
+
+저장하기. ( 맨 마지막 부분에 코딩 )
+Cookie cookie = new Cookie("key", String.valueOf(result));
+response.addCookie(cookie);
+
+읽기. ( 윗 부분에 코딩 )
+Cookie[] cookies = request.getCookies( );
+String _c = "";
+
+if ( cookies != null ) {
+    for ( Cookie cookie : cookies ) {
+         if ( "key".equals(cookie.getName( ) ) {
+               _c = cookie.getValue( );
+         }
+    }       
+}
+
+브라우저 쿠키 설정.
+Web cookie설정을 허용해줘야된다.
+설정 -> 사이트 설정 -> 쿠키 및 사이트 데이터 -> 쿠키 설정( 허용 ) -> 모든 쿠키 및 사이트 데이터 ( 쿠키 정보 확인 )
+
+주의사항.
+쿠기도 세션과 비슷한 원리로 1번 요청한 후에 Servlet에서 생성해서 응답할때 만들어진다.
+그래서 코딩을 할때, response.addCookie(cookie);를 뒷부분에 코딩하고, 앞부분에서 쿠키 data를 이용한다.
+
+
+
+ # Cookie의 path 옵션.
+
+원리.
+어느 URL에서 cookie를 사용할지 cookie의 사용범위를 정한다. 
+request header cookie : web Server가 WAS에 요청할때 어떤 쿠키, Session과 함께 요청하는지 알려줌.
+response header cookie : WAS가 web에 요청에 응답할때 cookie에 어떤 data를 담아서 응답하는지 알려줌.
+
+설정. 
+cookie.setPath( "URL" )
+
+주의사항.
+URL을 "/"로 적으면 모든 URL에서 사용가능하다.
+
+
+
+ # Cookie의 maxage 옵션.
+
+원리.
+Cookie는 Browser에 IN-memory안에 저장되어 있다가 Browser가 닫히면 같이 삭제되는데,
+maxage를 설정해주면 Browser가 아닌 IN-FILE에 저장되어 Browser가 꺼져도 설정한 시간동안 Cookie가 존재한다.
+
+설정.
+cookie.setMaxAge(second);      
+쿠키 응답 이후로 얼마나 존재할지 시간을 결정해줌. ( 초단위 )
+
+확인.
+만료날짜가 시간으로 나와있으면 제대로 설정된 것.
+maxage를 설정하지 않으면 '탐색 세션이 종료될 때' 라고 써 있다.
+
+주의사항.
+쿠키 설정을 확인해볼때 항상 이전 쿠키를 제거해야 설정을 제대로 확인할 수 있다.
+
+
+
+ # ServletContext / Session / Cookie 정리1.
+
+사용범위.
+ServletContext : 전역범위에서 사용하는 저장공간.
+Session : 세션 범위에서 사용하는 저장 공간.
+Cookie : Web Browser path 범주 공간.
+
+생명주기.
+ServletContext : WAS가 시작해서 종료할 때까지.
+Session : 세션이 시작해서 종료할 때까지.
+Cookie : Browser에 전달한 시간부터 만료시간까지.
+
+저장위치.
+ServletContext : WAS Server의 메모리.
+Session : WAS Server의 메모리.
+Cookie : Web Browser의 메모리 또는 파일.
+
+오랜시간동안 data를 저장해야 되는 경우.
+cookie : 적합하다.
+session : SessionID를 cookie로 전달되기 때문에 브라우저를 닫으면 cookie가 사라져서 새로운 sessionID를 받는다.
+            ( 자원낭비가 심하다 )
+
+"URL" 하나에서만 사용해야 되는 경우.
+cookie : 적합하다.
+session : 특정 URL에서만 쓰는 것까지 모두 session에 저장하면 WAS Server 메모리가 너무 무거워진다.
+
+
+
+ # 서버에서 페이지 전환하기 Redirection.
+
+원리.
+web에 들어왔을때 다른 web으로 이동시켜주는 기능이다.
+
+설정.
+response.sendRedirect("URL");
+
+
+
+ # 동적인 페이지( 서버페이지 )의 필요성.
+
+정적인 페이지 : client의 요청에 상관없이 같은 URL에 page는 항상 같은 화면을 보여주는 것이다.
+동적인 페이지 : client의 요청에 따라 page가 유동적으로 변하는 것이다.
+
+계산기 만들기 예제.
+html
+<style>
+    input{
+       width : 50px;
+       height : 50px;
+    }
+</style>
+
+CSS는 따로 공부하자!!!
+
+
+
+ # 동적인 페이지 서블릿으로 직접 만들기.
+
+HTML은 정적인 페이지여서 동적인 페이지로 만들려면 servlet같은 동적인 페이지로 옮겨야된다.
+Servlet에 HTML을 문자열 format형태로 출력하면 동적인 페이지를 만들 수 있다.
+
+팁.
+redirect 할때 경로가 같으면 따로 '/'를 쓰지 않아도 된다.
+
+
+
+ # 쿠키 삭제하기.
+
+1. cookieVariable = "";                    쿠키를 빈문자열으로 처리함.
+2. if( 어떤 조건에서 )
+   cookieVariable.setMaxAge(0);         쿠키를 바로 없앰.
+
+
+
+ # GET과 POST에 특화된 서비스 함수.
+
+원리
+GET과 POST에 따라 다른 방식으로 동작하게 만들기.
+super.service메소드는 doPost와 doGet메소드를 호출하게 되어있다.
+
+1번방식.
+if( request.getMethod( ).equals("GET" ) { get일때 실행할 문장.} 
+else if ( request.getMethod( ).equals("POST" ) { post일때 실행할 문장. }
+
+getMethod는 get 또는 post를 리턴한다.
+equals로 비교할때 POST, GET 대문자로 써야된다.
+HTML 수정은 tomcat 서버를 재시작할 필요없다.
+
+2번방식.
+Service메소드
+super.service(req,resp);
+doPost메소드, doGET메소드
+실행할 문장 override.
+
+부모클래스에 service함수는 doPost와 doGet메소드를 호출하게 되어있다.
+클래스에 service함수를 제거하면 부모클래스 service함수를 그대로 사용하기 때문에
+자동으로 doPost와 doGet메소드를 호출한다.
+
+정리.
+POST와 GET을 따로 사용해야 할 경우 service메소드를 지우고 doGET과 doPOST만 오버라이딩해서 사용가능.
+POST와 GET에 중복된 부분이 있을때, 1번방식으로 구분해서 사용. super.service는 지워야 함.
+
+
+ # 계산기 프로그램 하나의 서블릿으로 합치기.
+
+합쳐야 되는 이유.
+쿠키는 URL path 하나에만 적용하거나 전체에 적용해야됨.
+cookie.setPath("/url");
+
+doGet에
+GET요청에 관련된 부분을 적용.
+
+doPost
+POST요청에 관련된 부분을 적용.
+
+정리.
+redirect는 GET요청이다.
+하나로 합치면 <form> action은 없어도 된다.
+cookie.setPath("/URL");을 통해 자기자신만 사용하는 쿠키를 가질 수 있다.
+
+
+
+
+
+

@@ -1,0 +1,71 @@
+JSP - 1일차.
+
+
+ # JSP 시작하기.
+
+용어.
+JSP : jasper를 이용한 프로그래밍
+
+원리.
+file.jsp로 파일을 저장하면 적혀 있는 내용을 모두 출력할 수 있도록 한다.
+servlet에서 출력 반복적으로 사용해야 했던 번거로움을 줄여준다.
+
+URL.
+디렉토리경로.add_jsp.java 
+
+Tomcat Home directory 확인하는 법.
+이클립스 Servers -> Tomcat Server 더블클릭 -> Server path: -> tomcat 홈서버를 대신하는 공간이다. ( metadata )
+
+directory 경로 확인.
+JSP workspace -> .metadata -> plugins -> org.eclipse.wst.server.core -> tmp들.
+work : 재스퍼의 작업실이다. ( jsp.java와 jsp.class를 확인할 수 있다 )
+
+코드블록.
+<% 코드로 쓸 내용 %> 출력이 아닌 코드로 사용할 내용을 적는다.
+
+
+
+ # JSP 코드 블록.
+
+방식1.
+<% 코드로 인식할 내용 %> 
+ex ) <% out.print(y) %>
+
+방식2.
+<%=y %> = out.print(y); 
+
+out.write와 out.print차이
+out.write : 문자열만 출력한다.
+out.print : 여러가지 data를 출력한다.
+
+메소드만들기.
+코드로 메소드를 만들기 위해서는 <% ! 메소드 내용 %>하면 된다. 
+
+지시블럭.
+<%@ 지시할 내용 %> CharacterEncoding, context등을 설정할 수 있다.
+
+지시블럭의 필요 이유.
+<% 지시할 내용 %>을 맨 위에 적어도 jsp의 어떤 내용이 코드블러보다 먼저 들어가서 오류발생.
+
+
+주의사항.
+<%%>은 _jspServie 메소드에 코드로 들어가기 때문에 method를 사용할 수 없다. ( 중첩 메소드 X )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

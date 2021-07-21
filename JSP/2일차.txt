@@ -1,0 +1,69 @@
+
+ JSP - 41강 ~ 43강.
+
+
+ # JSP
+
+용어.
+Jasper : Java에서 좀 더 편하게 web을 다룰 수 있게 도와주는 소프트웨어 프로그램.
+JSP : Jasper Server Program.
+
+설명.
+add.jsp -> add_jsp.java를 만든다.
+
+
+
+ # 코드블럭.
+
+<% 코드 내용 %> : 가장 일반적인 코드 적용.
+<%= y %> : 변수를 쉽게 사용.
+<%! 클래스의 멤버 %> : 메소드가 아닌 클래스의 멤버로 들어가야 되는 코드에 사용.
+<%@ 페이지 지시자 블럭 %> : 지시블럭 - 가장먼저 실행되는 코드이다. ( 설정 관련된 코드를 적용 )
+
+주의사항.
+일반적인 코드 블럭을 사용하면 service( )안에 코드로 적용된다.
+
+
+
+ # JSP 내장객체 간단히 들여다보기.
+
+설명.
+JSP가 servlet을 만들면서 만들어낸 변수들이 존재한다.
+
+용어.
+내장객체 built-in object : JSP가 servlet을 만들면서 만들어낸 객체들이다. ( 알아두면 유용하다 )
+
+내장객체.
+request : 요청 관련.
+response : 응답 관련.
+pageContext : 내부에서 사용하는 set/get 관련 메소드들을 가지고 있다.
+session : session관련 객체.
+application : ServletContext 객체.
+contig : ServletConfig.
+out : JspWriter 객체.
+page : Object 객체.
+
+주의사항.
+JspWriter 객체 out은 거의 사용하지 않는다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

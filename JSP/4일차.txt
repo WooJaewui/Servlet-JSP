@@ -1,0 +1,76 @@
+
+
+ 4일차 - 46~47강.
+
+
+ # MVC model1.
+
+설명.
+코드를 만들때 블럭을 최소화 하자는 방식 중 한개이다.
+코드블럭을 모아놓고 위쪽은 입력코드, 아래쪽은 출력코드를 모아놓는다.
+
+MVC.
+Model : 데이터 변수 - Controller에서 제어(control)한 data를 변수로 담아서 View로 출력한다.
+View : HTML코드 - 모두 출력되는 코드.
+Controller : 자바코드 - data 입력과 data 제어(control)를 담당한다.
+
+사용설명.
+입력 / 제어를 담당하는 자바코드를 위에 모두 몰아넣는다.
+출력을 담당하는 HTML코드를 아래쪽에 몰아넣는다. 
+필요에 따라 중간에 자바코드에서 선언한 변수 Model을 HTML에 코드블럭을 통해 출력한다.
+
+
+
+ # MVC model2.
+
+설명.
+자바코드를 분리해서 따로 Servlet으로 만들어 놓는 방식이다. ( HTML만 JSP로 만든다 ) 
+
+용어.
+forward : ﻿서블릿코드를 다른 서블릿코드로 연결해 주는 것.
+Dispatcher : Controller가 JSP와 포워딩 할 수 있도록 도와주는 것. 
+               ( Controller와 JSP가 많아져도 Dispatcher는 한 개이다 )
+redirect : 진행하던 코드와 상관없이 다른 코드로 이동해서 진행하는 것.
+
+사용.
+request.setAttribute( String name , Object value );
+RequestDispatcher d = request.getRequestDispatcher( path );
+d.forward( request, response );
+
+주의사항.
+JSP를 실행하는게 아니라 Java를 실행해서 forward해서 JSP와 연결되는 방식이다.
+
+
+
+ # Data 저장 관련.
+
+pageContext : 하나의 서블릿 페이지에 대한 저장소. ( 지역 변수와 비슷한 느낌 )
+ServletContext : Web application에 대한 저장소. ( 전역 변수와 비슷한 느낌 )
+Request : foward 관계에서 사용되는 저장소. ( 앞 Servlet에서 저장해서 뒤 Servlet에 보내줌 )
+Session : 특정 Session에 대한 저장소.
+Cookie : client에 저장하는 저장소.
+
+
+
+
+ # Servlet 복습.
+
+@WebServlet( "URL" )  : URL 매핑.
+extends HttpServelt : Servlet 설정.
+Service( ) : Servlet의 main method 역할을 한다. 
+doGet( ) : get방식으로 form했을때 실행할 문장.
+doPost( ) : post방식으로 form했을때 실행할 문장.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+
+ 5일차 - 48~50강
+
+
+ # EL Expresssion Language.
+
+설명.
+HTML에서 Model을 사용하기 위해 <%= java code %> 했던 방식을 없애기 위한 방식이다.
+
+사용.
+<%=request.getAttribute( "name") %> - 기존방식.
+${result} - EL방식.
+
+<%=((List)request.getAttribute("list")).get(0); %> - 기존방식.
+${list[0]};
+
+<%=((Map)request.getAttribute("mapVar")).get("key") %>
+${mapVar.key};
+
+
+
+ # EL 데이터 저장소.
+
+데이터 저장소 4가지.
+application : 서버에서 사용되는 저장소이다.
+session : 서버에서 Session마다 data를 저장하는 저장소이다.
+request : Servlet에서 저장하는 data 저장소이다.
+page : JSP에서 Servlet 생성시 만들어지는 내장객체 pageContext안에 존재하는 저장소이다.
+
+우선순위.
+page -> request -> session -> application 순으로 data를 찾는다.
+변수이름이 같을때 우선순위로 data를 꺼내온다.
+
+우선순위와 상관없이 꺼내기.
+${sessionScope.var}
+${pageScope.var}
+
+다른 저장 데이터 얻기.
+${param.var} : 파라미터값 얻기.
+${header.host} : header에 저장된 data얻기.
+${header.["host"]} : header에 저장된 data를 형식에 구애받지 않고 얻는 방법.
+
+주의사항.
+EL은 다른 메소드는 사용할 순 없지만, getter메소드는 사용할 수 있으며 형식이 특이하다.
+<%=pageContext.getRequest( ).getMethod( )%> -> ${pageContext.request.method}
+
+
+
+ # EL 연산자.
+
+연산자.
++ , - , * , /
+lt : <와 같음. 
+le : <=와 같음.
+gt : >와 같음.
+ge : >=와 같음.
+empty : null 또는 빈문자열일 경우 true.
+
+주의사항.
+lt,gt에 대해 잘 생각해서 사용해야된다. ( HTML을 사용할 수 없는 경우에 사용 )
+int / int를 해도 소수점이 생성된다.
+String / int를 하면 String이 숫자로 형변환 가능하면 자동형변환 된다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

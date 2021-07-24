@@ -1,0 +1,124 @@
+
+ 6일차 - 51강 ~ 62강.
+
+
+ # JSP를 이용한 웹 프로그래밍.
+
+ALT + Enter : Resource에 대한 정보를 불러온다. ( encoding 방식 변경 가능 )
+
+
+
+ # JDBC를 JSP에 적용하기.
+
+1. Class.forName( ), Connection,  Statment, ResultSet 적용하기.
+2. java.sql 패키지 import하기.
+3. WEB-INF -> lib -> ojdbc8.jar 파일 넣기. 
+4. close( )적기.
+
+
+
+ # Model2의 장단점.
+
+장점.
+분리해서 만들었기 때문에 개별적으로 작업이 가능하다.
+JSP파일은 요청이 들어오면 Servlet을 만드는 방식인데, 
+코드가 많고 복잡하면 실행 시간이 오래걸린다. ( Servlet은 Java코드라서 미리 컴파일 가능 )
+
+단점.
+따로 분리해서 만들어야되기 때문에 만드는데 복잡하다.
+
+
+
+ # forward 복습.
+
+request.setAttribute( name, data );
+request.getRequestDispatcher( 경로\파일이름 ).forward( request, response );
+
+
+
+ # 모델 데이터를 위한 구조화.
+
+설명.
+﻿관계가 있는 data를 클래스를 만들어서 하나로 묶어준다.
+
+순서.
+1. Class를 만들어서 하나로 묶어줄 수 있는 data를 묶는다.
+2. 포워딩 하는 servlet에 가서 Class의 객체를 생성하고 data를 초기화한다.
+3. request.setAttribute( className, classVar ); 로 JSP로 Class를 보낸다.
+4. JSP에서 %{class.Var}로 사용한다. 
+
+주의사항.
+4번에서 변수를 직접 사용하는 것이 아니라 getter Method를 사용하는 것이다. ( 중요!! )
+
+
+
+ # View 페이지 숨기기.
+
+설명.
+MVC 모델2에서 View페이지(JSP파일)은 Controller(Servelet파일)에서 포워딩해야 실행된다.
+자체적으로 실행하면 예외가 발생한다.
+
+사용.
+1. WEB-INF 안에 view 디렉토리를 만든다.
+2. view 디렉토리에 view 파일들을 모아 넣는다.
+3. Controller에 포워드 path를 변경한다.
+
+주의사항.
+WEB-INF 안으로 옮긴 view파일을 직접 실행하면 404 에러가 발생한다.
+
+
+
+ # <forEach> 
+
+설명.
+JSP에서 반복문을 사용하는 방법이다.
+
+다운방법.
+jstl download 검색 -> Maven Repository -> jar 다운로드.
+
+사용.
+1. jstl을 다운받는다. 
+2. jstl을 WEB-INF -> lib폴더 안에 넣는다.
+3. JSP에 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" ( ~~~/jsp/jstl/core 선택 )
+4. <c:forEach var="n" items="${var}"> 반복할 내용 </c:forEach>
+
+반복원리.
+forEach에 items는 반복할 데이터를 의미하고, var는 items에 데이터를 pageContext에 저장한다.
+
+
+
+ # JSTL.
+
+용어.
+JSP Standard Tag Library : JSP에서 사용할 수 있는 Tag 라이브러리이다.
+prefix : uri를 대신해서 사용할 접두사이다. 변수와 같은 역할을 한다.
+uri : Uniform Resource Identifier으로 자원을 구분할 수 있는 식별자이다.
+
+종류.
+Core : 제어의 행위와 관련된 tag.
+Formating : data를 format할 때 사용하는 tag.
+Functions : data를 조작할 수 있는 tag.
+SQL, XML : 사용하지 않는 것이 좋다.
+
+
+
+ # 단축키.
+
+Java 주석처리 : ctrl + / .
+HTML 주석처리 : ctrl + shift + / .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

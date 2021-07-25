@@ -1,0 +1,108 @@
+
+ 7일차 - 63 ~ 69강.
+
+
+ # <forEach>의 속성 사용하기.
+
+var : 변수 이름 설정.
+items : 반복할 data 불러오기.
+begin : 시작할 부분 설정. ( 인덱스 값 사용 )
+end : 끝 부분 설정. ( 인덱스 값 사용 )
+varStatus : 상태를 나타내는 변수 이름 설정. ( current, index, count, first, last, step )
+
+
+
+ # JSTL으로 Page 번호 만들기.
+
+변수 생성하기.
+<c:set var="변수이름" value="값" />
+
+파라미터 변수 사용.
+${pram.queryName} : 파라미터를 사용한다.
+
+5개씩 끊어서 페이지 하기.
+<c:set var="page" value="${(pram.p==null)?1:pram.p)}" />
+<c:set var="startNum" value="${ page-(page-1)%5 }" />;
+<c:forEach var="i" begin="0" end="4" > ${ startNum + i } <c:forEach>
+
+
+
+ # JSTL으로 if문 만들기.
+
+jstl if문.
+<c:if text="${ 조건 }">
+     실행할 문장1.
+</c:if> 
+
+주의사항.
+else문이 없기 때문에 else if하려면 if문을 하나 더 만들어야된다.
+
+
+
+ # JSTL forTokens.
+
+설명.
+forEach처럼 반복하는 문장인데, delims를 통해 data를 구분할 delims를 가지고 있다.
+
+사용.
+<c:forTokens var="file" items="list" delims="구분자" varStatus="상태변수">
+      <a href="${file}">${file}</a>
+</c:forTokens>
+
+ 
+
+ # JSTL format태그 - formatDate.
+
+설명.
+JSTL 종류 중에 하나로 format 날짜 formating을 담당하는 태그이다.
+
+사용.
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:formatDate pattern="yyyy-MM-dd" value="날짜관련값" />
+
+fmt:formatDate : 날짜와 관련된 formating을 하는 태그이다.
+
+
+
+ # JSTL format태그 - formatNumber.
+
+설명.
+JSTL 종류 중에 하나로 format 숫자 출력 형식 formating을 담당하는 태그이다.
+
+사용.
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:formatNumber value="숫자값" />
+
+주의사항.
+value에 숫자값을 넣어주면 세자리 수마다 ' , '를 붙여준다.
+format에 달러표시, 소수점 몇까지 표시 등을 표현 할 수 있다.
+
+
+
+ # JSTL functions. 
+
+설명.
+JSTL 종류 중에 하나로 data를 조작할 수 있게 도와주는 태그이다.
+태그 형태로 사용하지 않고, 코드 블럭안에서 메소드처럼 사용한다.
+
+사용.
+${fn:toUpperCase( str )}
+
+팁.
+Java에서 jstl function을 직접 생성해서 사용할 수 있다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

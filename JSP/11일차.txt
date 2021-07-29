@@ -1,0 +1,30 @@
+
+ 11일차 - 78 ~ 80강.
+
+
+ # query Data 받을때 주의점.
+
+주의점.
+1. query Data가 null일 경우를 처리.
+2. ""으로 오는 경우를 처리.
+
+자바에서 사용.
+if( query != null && !query.equals( "" ) ) { 실행할 문장; }
+
+jsp에서 사용.
+empty query 
+
+팁.
+empty : null이거나 " "열 일 경우 true를 반환한다.
+
+
+
+ # JSP에서 JAVA 스태틱 메소드.
+
+설명.
+Java의 스태틱 메소드는 JSP EL에서 사용할 수 있다.
+
+사용.
+${ Math.ceil( 숫자 ) } 
+
+

@@ -1,0 +1,209 @@
+
+
+ 13일차 - 90 ~ 103강.
+
+
+
+ # 400 번대 Error.
+
+403 : URL, 메소드 둘 다 있지만 권한이 없는 경우 발생. ( 보안 오류 )
+404 : URL이 없을때 발생하는 오류.
+405 : URL은 있지만, WEB에서 보낸 query에 맞는 doGet / doPost 메소드가 없을때 발생하는 오류.
+
+
+
+ # 다중 POST / GET 요청.
+
+설명.
+같은 이름으로 여러개의 POST / GET 요청이 있을 때 사용하는 방법이다.
+
+사용.
+String[ ] values = request.getParameterValues( "param" )
+
+
+
+ # 다중 Submit 요청 구분하기.
+
+설명.
+submit 버튼이 여러개 일 때 페이지에서 한 번에 하나의 submit만 누를 수 있다.
+하나의 submit 데이터만 오기 때문에 paramName을 같은 이름으로 해서 제어하는 것이 편리하다.
+
+사용.
+<input type="submit" name="Name" value="data1">
+<input type="submit" name="Name" value="data2">
+
+String name = request.getParameter( "Name" )
+switch( name ) { 
+	case "data1":
+                   실행할 문장;	        
+                   break;
+	case "data2":
+	       실행할 문장;
+                   break;
+}             
+
+
+
+ # Redirect.
+
+설명.
+내가 원하는 페이지 URL로 보내는 역할을 한다.
+
+사용.
+response.sendRedirect( "url" );
+
+
+주의사항.
+Servlet에서 redirect를 요청하면 WEB이 아닌 Servlet( WAS )를 실행한다.
+
+
+
+ # URL - mapping 오류.
+
+설명.
+Project안에 똑같은 이름의 Servlet이 있을경우 URL mapping이 잘 되지 않아 발생하는 오류. 
+
+사용. ( 편법 )
+url에 맞는 빈 폴더/파일을 임시로 만들어서 이클립스 porject explorer에서 실행한다.
+
+주의사항.
+실제 파일을 실행하면 안된다.
+
+
+
+ # form action.
+
+설명.
+같은 url을 가지는 경우 작성하지 않아도 되지만, 
+브라우저의 호환성에 따라 작성해야만 작동하는 브라우저도 있기 때문에 작성해주자.
+
+
+
+ # boolean 타입변수.
+
+설명.
+boolean 타입의 변수의 getter메소드를 생성하면 getVariable이 아니라 isVariable이 생성된다.
+필요하면 getVariable로 바꿔주자.
+
+
+
+ # 파일 업로드.
+
+내용.
+첨부 파일와 같이 파일을 다루는 작업을 form을 통해 할 경우 사용하는 방식이다.
+
+사용.
+<form enctype="multipart/form-data"> </form>
+
+설명.
+multipart/form-data를 하면 각각의 query가 따로 나눠져서 문자 이외의 data로 전송이 가능하다.
+
+주의사항.
+기존의 getParameter( "query" ) 방식으로 data를 읽어 올 수 없다.
+
+
+
+ # 파일 업로드를 위한 Servlet 설정.
+
+1. web.xml에 설정하기.
+
+2. annotation으로 설정하기.
+@multipartConfig(
+	location="/location",
+	fileSizeThreshold=1024*1024,
+	maxFileSize=1024*1024*50,
+	maxRequestSize=1024*1024*50*5
+)
+
+설명.
+location : fileSizeThreshold의 크기를 넘었을때 저장될 disc 위치.
+fileSizeThreshold : 여기서 설정한 크기를 넘으면 server 메모리가 아닌 disc에 저장한다.
+maxFileSize : 한 개 파일의 크기를 결정한다.
+maxRequestSize : 모든 파일 용량의 합의 크기를 결정한다.
+
+주의사항.
+location은 절대적인 path를 설정하라고 적혀있어서, 
+차라리 적지 않고 java 기본 저장 path에 저장되는 것이 좋다.
+
+
+
+ # Servlet에서 파일 저장하기.
+
+설명.
+form enctpy="multipart/form-data"로 보내진 data를 servlet에서 받아서 disc에 저장하기.
+
+사용.
+Part partName = request.getPart( "valueName" );
+
+저장장소 확인.
+request.getServletContext( ).getRealPath( "/upload" );
+
+파일명 확인.
+partName.getSubmittedFileName( );
+
+주의사항.
+이클립스에서 사용하는 WebContent는 개발할때 사용하는 workspace의 디렉토리이다.
+실제로 source들이 저장되는 path는 따로 존재한다. ( ServletContext에 realpath )
+'/upload'는 ServletContext에서 제공하는 기본 데이터 저장장소이다. ( 없을 경우 폴더 생성 )
+
+
+
+ # 다중 파일 저장하기.
+
+사용.
+Collection<Part> parts = request.getParts( ).
+for( Part p : parts ) { 
+	if( !p.getName( ).equals( "valueName" )) continue;
+	Part filePart = p;	
+	...
+	...
+}
+
+
+
+ # 절대 주소 사용하기.
+
+설명.
+realPath를 통해 실제 데이터를 저장하는 장소를 사용할 수 있다.
+
+메소드.
+path.exists( ) : path가 존재하는지 확인해주고 boolean 값을 반환한다.
+path.mkdirs( ) : mkdirs( )는 부모 디렉토리가 없으면 같이 생성해준다.
+
+사용.
+String realPath = request.getServletContext( ).getRealPath( path );
+File path = new File( realPath ) ;
+if( !path.exists( ) ) { 
+	path.mkdirs( );
+}
+
+
+
+ # Servler에서 파일 저장하기 정리.
+
+1. <form enctype="multipart/form-data> : JSP에서 data를 Server로 보내기.
+2. Part partName = request.getPart( "valueName" ) : Servlet에서 JSP에서 보낸 data 받기.
+3. String fileName = partName.getSubmittedFileName( ) : 파일이름 확인하기.
+4. String realPath = request.getServletContext( ).getRealPath( "/upload" ) : 업로드 되는 path 확인.
+5. InputStream fis = partName.getInputStream( ) : 읽어올 스트림 만들기.
+6. String filePath = realPath + File.separator + fileName : 실제 저장될 path 설정.
+7. FileOutputStream fos = new FileOutputStream( filePath ) : 파일 저장 스트림 만들기.
+8. byte[ ] buf = new byte[ num ], int size = 0 : 파일을 옮겨줄 버퍼 배열, 크기 확인 변수 만들기.
+9. while( ( size = fis.read( buf ) ) != -1 ) { fos.write( buf, 0, size ) } : 입력한 데이터를 파일로 출력하기.
+
+주의사항.
+파일을 inputStream할 때 한 바이트씩 읽어 오는 것보다 바이트 배열로 읽는 것이 훨씬 효율적이다.
+( 파일처럼 여러 byte로 된 파일일 경우 효율적이다 )
+
+
+
+
+
+
+
+
+
+
+
+
+

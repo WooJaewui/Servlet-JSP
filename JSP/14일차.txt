@@ -1,0 +1,16 @@
+
+
+ 14일차 - 104 ~ 106강.
+
+
+
+ # Query 안보이게 보내기.
+
+설명.
+Query문을 통해 data를 받아 오지만 사용자( Client )에게는 안보이게 전달하는 방법이다.
+
+사용.
+<input type="hidden" name="queryVar" value="data">
+
+
+
